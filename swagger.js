@@ -19,7 +19,7 @@ const swaggerOptions = {
         description: "Development server",
       },
       {
-        url: "https://api.maspos.com",
+        url: "https://maspos-api.vercel.app/api-docs/",
         description: "Production server",
       },
     ],
