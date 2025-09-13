@@ -2,22 +2,34 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// Pastikan folder uploads ada
+// Handle directory creation for different environments
 const uploadDir = "public/uploads/products";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+
+// Only create directory in development/local environment
+// Vercel doesn't allow file system writes
+if (process.env.NODE_ENV !== "production") {
+  if (!fs.existsSync(uploadDir)) {
+    try {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    } catch (error) {
+      console.warn("Could not create upload directory:", error.message);
+    }
+  }
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const fileName = `product-${Date.now()}${ext}`;
-    cb(null, fileName);
-  },
-});
+// Use memory storage for production (Vercel), disk storage for development
+const storage = process.env.NODE_ENV === "production"
+  ? multer.memoryStorage() // Store in memory for Vercel
+  : multer.diskStorage({     // Store on disk for local development
+      destination: function (req, file, cb) {
+        cb(null, uploadDir);
+      },
+      filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const fileName = `product-${Date.now()}${ext}`;
+        cb(null, fileName);
+      },
+    });
 
 // Filter hanya menerima JPEG, JPG, PNG
 const fileFilter = (req, file, cb) => {
