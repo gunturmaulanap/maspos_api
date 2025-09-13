@@ -1,0 +1,58 @@
+@host=http://127.0.0.1:3000
+@content=application/json
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJndWd1biIsImVtYWlsIjoiZ3VndW5AZ21haWwuY29tIiwiaWF0IjoxNzU3NzMzMzYxLCJleHAiOjE3NTc3MzY5NjF9.MRZmevH0lUX7IVXwnwZBj8l_X912Wd7eGDrXqaJKZMY
+
+
+### Get Current User Profile (Protected)
+GET {{host}}/users/profile HTTP/1.1
+Authorization: Bearer {{token}}
+
+### Update Current User Profile (Protected)
+PUT {{host}}/users/profile HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+{
+    "username": "gunturmaulana",
+    "name": "Guntur Maulana",
+    "email": "guntur@gmail.com"
+}
+
+### Create User (Admin only)
+POST {{host}}/users/create HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+{
+    "name": "Asdanet Test",
+    "username": "asdanet",
+    "email": "asdanet@gmail.com",
+    "password": "asdanet"
+}
+
+### Get All Users (Admin only)
+GET {{host}}/users/all HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+### Get By ID Users (Admin only)
+GET {{host}}/users/2 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+### UPDATE By ID Users (Admin only)
+PUT {{host}}/users/3 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+{
+    "username": "asdanet",
+    "email": "asda123@gmail.com",
+    "password": "asdanet"
+}
+
+### DELETE By ID Users (Admin only)
+DELETE {{host}}/users/2 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+

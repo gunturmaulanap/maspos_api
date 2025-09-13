@@ -1,0 +1,43 @@
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
+// Pastikan folder uploads ada
+const uploadDir = "public/uploads/products";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const fileName = `product-${Date.now()}${ext}`;
+    cb(null, fileName);
+  },
+});
+
+// Filter hanya menerima JPEG, JPG, PNG
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Bentuk jpeg, jpg, png yang diperbolehkan"));
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+});
+
+// Middleware untuk handle upload
+const handleUpload = upload.single("image");
+
+module.exports = { handleUpload };

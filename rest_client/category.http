@@ -1,0 +1,32 @@
+@host=http://127.0.0.1:3000
+@content=application/json
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJndWd1biIsImVtYWlsIjoiZ3VndW5AZ21haWwuY29tIiwiaWF0IjoxNzU3NzM2ODU3LCJleHAiOjE3NTc3NDA0NTd9.Nu5i_Ps8S1Bg_4btcrSgnKlLP7Tuh4tnXw_WcAcCtSM
+
+### Get All Categories (Public)
+GET {{host}}/categories/all HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+
+### Create Category (Admin only)
+POST {{host}}/categories/create HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+{
+    "name": "Pizza"
+}
+
+### Update Category by ID (Admin only)
+PUT {{host}}/categories/1 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}
+
+{
+    "name": "Burger"
+}
+
+### Delete Category by ID (Admin only)
+DELETE {{host}}/categories/6 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: {{content}}

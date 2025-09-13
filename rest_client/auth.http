@@ -1,0 +1,38 @@
+@host=http://127.0.0.1:3000
+@content=application/json
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJndWd1biIsImVtYWlsIjoiZ3VndW5AZ21haWwuY29tIiwiaWF0IjoxNzU3NzM2ODU3LCJleHAiOjE3NTc3NDA0NTd9.Nu5i_Ps8S1Bg_4btcrSgnKlLP7Tuh4tnXw_WcAcCtSM
+
+POST {{host}}/auth/signup HTTP/1.1
+content-type: {{ content}}
+
+{
+    "name": "Gugun Maulana",
+    "username": "gugun",
+    "email": "gugun@gmail.com",
+    "password": "gugun1710",
+    "confirmPassword": "gugun1710"
+}
+       
+### 2. Login User 
+POST {{host}}/auth/login HTTP/1.1
+content-type: {{ content}}
+
+{
+    "username": "gunturmaulana",
+    "password": "password"
+}
+
+### 3. Change Password (Protected - requires token)
+POST {{host}}/auth/change-password HTTP/1.1
+Authorization: Bearer {{token}}
+content-type: {{ content}}
+
+{
+    "currentPassword": "gugun1710",
+    "newPassword": "gugun2288",
+    "confirmNewPassword": "gugun2288"
+}
+
+### 4. Logout (Invalidate Token)
+POST {{host}}/auth/logout HTTP/1.1
+Authorization: Bearer {{token}}
