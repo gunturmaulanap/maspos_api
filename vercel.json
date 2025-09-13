@@ -15,13 +15,6 @@
       }
     },
     {
-      "src": "/api-docs",
-      "status": 302,
-      "headers": {
-        "Location": "/api-docs/"
-      }
-    },
-    {
       "src": "/api-docs/(.*)",
       "dest": "app.js"
     },

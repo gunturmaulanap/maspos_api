@@ -15,15 +15,29 @@ var productsRouter = require("./routes/products");
 
 var app = express();
 
-// Swagger setup
+// Swagger setup - place before routes
 try {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+  console.log("Setting up Swagger UI...");
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
+    explorer: true,
+    swaggerOptions: {
+      url: "/api-docs.json"
+    },
+    customCss: `
+      .swagger-ui .topbar { display: none }
+      .swagger-ui .info .title { color: #3b4151 }
+    `,
+    customSiteTitle: "MASPOS API Documentation"
+  }));
 
   // Export Swagger specs as JSON for external tools
   app.get("/api-docs.json", (req, res) => {
+    console.log("Serving Swagger JSON specs");
     res.setHeader("Content-Type", "application/json");
     res.send(swaggerSpecs);
   });
+
+  console.log("Swagger UI setup completed");
 } catch (error) {
   console.error("Error setting up Swagger:", error.message);
 }
@@ -40,8 +54,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
 // Static Files
 app.use(express.static(path.join(__dirname, "public")));
+
+// Serve Swagger UI static files explicitly
+app.use('/api-docs-static', express.static(path.join(__dirname, 'node_modules/swagger-ui-dist'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    } else if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    }
+  }
+}));
 
 // Routes
 try {
@@ -51,9 +82,37 @@ try {
   console.error("Error loading routes:", error.message);
 }
 
+// Simple root route for testing
+app.get("/", (req, res) => {
+  console.log("Root route accessed");
+  res.json({
+    message: "MASPOS API is running!",
+    docs: "/api-docs/",
+    version: "2.0.0",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Test route to verify Swagger is working
+app.get("/test", (req, res) => {
+  console.log("Test route accessed");
+  res.json({
+    status: "OK",
+    swagger: swaggerSpecs ? "Loaded" : "Not loaded",
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Fallback route for /api-docs if Swagger fails
 app.get("/api-docs", (req, res) => {
+  console.log("Redirecting /api-docs to /api-docs/");
   res.redirect("/api-docs/");
+});
+
+// Handle all other /api-docs/* routes
+app.get("/api-docs/*", (req, res, next) => {
+  console.log(`Swagger route accessed: ${req.path}`);
+  next();
 });
 
 // catch 404 and forward to error handler
