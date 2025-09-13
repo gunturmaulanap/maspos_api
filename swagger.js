@@ -15,12 +15,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Development server",
-      },
-      {
-        url: "https://maspos-api.vercel.app/api-docs/",
-        description: "Production server",
+        url: process.env.NODE_ENV === 'production' 
+          ? "https://maspos-api.vercel.app" 
+          : "http://localhost:3000",
+        description: process.env.NODE_ENV === 'production' 
+          ? "Production server" 
+          : "Development server",
       },
     ],
     components: {

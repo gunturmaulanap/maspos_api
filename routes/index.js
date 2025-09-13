@@ -5,10 +5,8 @@ const ProtectedRouter = require("./protected");
 const ProductRouter = require("./products");
 
 const routes = (app, prefix) => {
-  // Simple welcome route
-  app.get("/", (req, res) => {
-    res.send("Maspos API Documentation at https://localhost:3000/api-docs/");
-  });
+  // Routes will be handled by Vercel redirect to /api-docs
+  // No need for root route as Vercel handles the redirect
 
   app.use(prefix + "auth", AuthRouter);
   app.use(prefix + "users", UserRouter);
