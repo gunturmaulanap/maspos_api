@@ -16,13 +16,17 @@ var productsRouter = require("./routes/products");
 var app = express();
 
 // Swagger setup
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+try {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
-// Export Swagger specs as JSON for external tools
-app.get("/api-docs.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(swaggerSpecs);
-});
+  // Export Swagger specs as JSON for external tools
+  app.get("/api-docs.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpecs);
+  });
+} catch (error) {
+  console.error("Error setting up Swagger:", error.message);
+}
 
 // view engine setup
 // app.set("views", path.join(__dirname, "views"));
@@ -40,8 +44,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-const routes = require("./routes");
-routes(app, "/");
+try {
+  const routes = require("./routes");
+  routes(app, "");
+} catch (error) {
+  console.error("Error loading routes:", error.message);
+}
+
+// Fallback route for /api-docs if Swagger fails
+app.get("/api-docs", (req, res) => {
+  res.redirect("/api-docs/");
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

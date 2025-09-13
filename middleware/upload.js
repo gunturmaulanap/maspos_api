@@ -18,18 +18,20 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Use memory storage for production (Vercel), disk storage for development
-const storage = process.env.NODE_ENV === "production"
-  ? multer.memoryStorage() // Store in memory for Vercel
-  : multer.diskStorage({     // Store on disk for local development
-      destination: function (req, file, cb) {
-        cb(null, uploadDir);
-      },
-      filename: function (req, file, cb) {
-        const ext = path.extname(file.originalname);
-        const fileName = `product-${Date.now()}${ext}`;
-        cb(null, fileName);
-      },
-    });
+const storage =
+  process.env.NODE_ENV === "production"
+    ? multer.memoryStorage() // Store in memory for Vercel
+    : multer.diskStorage({
+        // Store on disk for local development
+        destination: function (req, file, cb) {
+          cb(null, uploadDir);
+        },
+        filename: function (req, file, cb) {
+          const ext = path.extname(file.originalname);
+          const fileName = `product-${Date.now()}${ext}`;
+          cb(null, fileName);
+        },
+      });
 
 // Filter hanya menerima JPEG, JPG, PNG
 const fileFilter = (req, file, cb) => {
