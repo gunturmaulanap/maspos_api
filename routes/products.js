@@ -196,40 +196,40 @@ router.delete(
   ProductController.deleteProduct
 );
 
-/**
- * @swagger
- * /products/upload:
- *   post:
- *     summary: Upload product image
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             required:
- *               - image
- *             properties:
- *               image:
- *                 type: string
- *                 format: binary
- *                 description: Image file to upload
- *     responses:
- *       200:
- *         description: Image uploaded successfully
- *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized
- */
-router.post(
-  "/upload",
-  verifyToken,
-  handleUpload,
-  ProductController.uploadImage
-);
+// /**
+//  * @swagger
+//  * /products/upload:
+//  *   post:
+//  *     summary: Upload product image
+//  *     tags: [Products]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         multipart/form-data:
+//  *           schema:
+//  *             type: object
+//  *             required:
+//  *               - image
+//  *             properties:
+//  *               image:
+//  *                 type: string
+//  *                 format: binary
+//  *                 description: Image file to upload
+//  *     responses:
+//  *       200:
+//  *         description: Image uploaded successfully
+//  *       400:
+//  *         description: Bad request
+//  *       401:
+//  *         description: Unauthorized
+//  */
+// router.post(
+//   "/upload",
+//   verifyToken,
+//   handleUpload,
+//   ProductController.uploadImage
+// );
 
 module.exports = router;
