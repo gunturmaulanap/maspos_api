@@ -18,10 +18,13 @@ const verifyToken = require("../middleware/verifyToken");
  *           schema:
  *             type: object
  *             required:
+ *               - name
  *               - username
  *               - email
  *               - password
  *             properties:
+ *               name:
+ *                 type: string
  *               username:
  *                 type: string
  *               email:
