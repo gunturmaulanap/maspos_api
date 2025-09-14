@@ -18,17 +18,21 @@ var app = express();
 // Swagger setup - place before routes
 try {
   console.log("Setting up Swagger UI...");
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
-    explorer: true,
-    swaggerOptions: {
-      url: "/api-docs.json"
-    },
-    customCss: `
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpecs, {
+      explorer: true,
+      swaggerOptions: {
+        url: "/api-docs.json",
+      },
+      customCss: `
       .swagger-ui .topbar { display: none }
       .swagger-ui .info .title { color: #3b4151 }
     `,
-    customSiteTitle: "MASPOS API Documentation"
-  }));
+      customSiteTitle: "MASPOS API Documentation",
+    })
+  );
 
   // Export Swagger specs as JSON for external tools
   app.get("/api-docs.json", (req, res) => {
@@ -64,20 +68,22 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 // Serve Swagger UI static files explicitly
-app.use('/api-docs-static', express.static(path.join(__dirname, 'node_modules/swagger-ui-dist'), {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    } else if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-  }
-}));
+app.use(
+  "/api-docs-static",
+  express.static(path.join(__dirname, "node_modules/swagger-ui-dist"), {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".js")) {
+        res.setHeader("Content-Type", "application/javascript");
+      } else if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+      }
+    },
+  })
+);
 
 // Routes
 try {
-  const routes = require("./routes");
-  routes(app, "");
+  require("./routes")(app);
 } catch (error) {
   console.error("Error loading routes:", error.message);
 }
@@ -89,7 +95,7 @@ app.get("/", (req, res) => {
     message: "MASPOS API is running!",
     docs: "/api-docs/",
     version: "2.0.0",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -99,7 +105,7 @@ app.get("/test", (req, res) => {
   res.json({
     status: "OK",
     swagger: swaggerSpecs ? "Loaded" : "Not loaded",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
