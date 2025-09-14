@@ -85,6 +85,9 @@ const getAllProducts = handleException(async (req, res) => {
 });
 
 const createProduct = handleException(async (req, res) => {
+  // Log payload yang diterima
+  console.log("CREATE PRODUCT PAYLOAD:", req.body);
+  // Jangan ambil id dari req.body, hanya ambil field yang diperlukan
   const { name, price, category_id } = req.body;
 
   // Validasi category (tetap diperlukan karena cek ke database)
@@ -98,7 +101,7 @@ const createProduct = handleException(async (req, res) => {
     );
   }
 
-  // Insert product
+  // Insert product tanpa id, biarkan database generate otomatis
   const product = await ProductModel.query().insert({
     name,
     image_url,
