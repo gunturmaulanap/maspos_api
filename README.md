@@ -2,6 +2,10 @@
 
 MASPOS V2 adalah backend REST API untuk aplikasi Point of Sale (POS) berbasis Node.js, Express, Knex, Objection, dan PostgreSQL.
 
+# API DOCUMENTATION
+
+maspos_api.vercel.app
+
 ## Instalasi & Setup
 
 1. **Clone repository**
